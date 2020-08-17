@@ -5,24 +5,34 @@ using UnityEngine;
 
 public class BlockScript : MonoBehaviour
 {
-    [SerializeField] public TextMeshProUGUI scoreText;
+    TextMeshProUGUI scoreText;
     [SerializeField] public LevelScript levelScript;
     [SerializeField] public AudioClip clip;
-    static int gameScore;
+    [SerializeField] GameObject blockParticleVFX;
+    // static data will persist across all the objects for the type of Block or BlockScript
+    public static int gameScore = 0;
+
     private void Start()
     {
-        gameScore = 0;
+        scoreText = GameObject.FindGameObjectWithTag("ScoreText").GetComponent<TextMeshProUGUI>();
+        scoreText.text = gameScore.ToString();
     }
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        // PlayClipAtPoint creates a temporary gameObject that is created in the world space so that
-        // the sound keeps on playing even though the gameobject is deleted or destroyed
-        AudioSource.PlayClipAtPoint(clip, Camera.main.transform.position);
-        gameScore += 83;
-        scoreText.text = gameScore.ToString();
-        Debug.Log("Object name: " + collision.gameObject.name);
-        Debug.Log("GameScore: " + gameScore);
-        Debug.Log(scoreText.text);
-        Destroy(gameObject);               
+        if(gameObject.tag == "Breakable")
+        {
+            // PlayClipAtPoint creates a temporary gameObject that is created in the world space so that
+            // the sound keeps on playing even though the gameobject is deleted or destroyed
+            AudioSource.PlayClipAtPoint(clip, Camera.main.transform.position);
+            gameScore += 83;
+            // The following line gives the referrene to the score object of the canvas directly        
+            scoreText.text = gameScore.ToString();
+            // Playing the VFX particle effect
+            // First Instantiate the particle effect that will run. It returns a gameObject. 
+            // Then destroy the gameObject after 1 second delay
+            Destroy(Instantiate(blockParticleVFX, transform.position, transform.rotation), 1f);
+            Destroy(gameObject);
+        }               
     }
 }

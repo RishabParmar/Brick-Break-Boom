@@ -13,6 +13,8 @@ public class SceneLoader : MonoBehaviour
 
     public void LoadStartScene()
     {
+        // For resetting the score
+        BlockScript.gameScore = 0;
         SceneManager.LoadScene(0);
     }
 

@@ -6,11 +6,14 @@ using UnityEngine;
 public class BlockScript : MonoBehaviour
 {
     TextMeshProUGUI scoreText;
+    [SerializeField] int maxHits = 3;
     [SerializeField] public LevelScript levelScript;
     [SerializeField] public AudioClip clip;
     [SerializeField] GameObject blockParticleVFX;
+    [SerializeField] Sprite[] damageSprites;
     // static data will persist across all the objects for the type of Block or BlockScript
     public static int gameScore = 0;
+    int timesHit = 0;
 
     private void Start()
     {
@@ -20,7 +23,12 @@ public class BlockScript : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if(gameObject.tag == "Breakable")
+        timesHit++;
+        if(timesHit <= (maxHits - 1) && gameObject.tag == "Breakable")
+        {         
+            GetComponent<SpriteRenderer>().sprite = damageSprites[timesHit - 1];
+        }
+        if(gameObject.tag == "Breakable" && timesHit >= maxHits)
         {
             // PlayClipAtPoint creates a temporary gameObject that is created in the world space so that
             // the sound keeps on playing even though the gameobject is deleted or destroyed

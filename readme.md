@@ -1,6 +1,6 @@
 Break the Bricks with a BOOM!!
 
-The classic brick breaker game created in Unity Engine 5.
+The classic brick breaker game created in Unity Engine 5 and C#.
 
 <-------------- Download the game -------------->
 
